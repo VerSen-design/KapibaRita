@@ -1,4 +1,3 @@
-html
 <!doctype html>
 <html lang="ru">
 <head>
@@ -25,13 +24,13 @@ html
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --radius: 22px;
 
-      --headerH: 64px; /* для scroll-padding на десктопе */
+      --headerH: 64px;
     }
 
     * { box-sizing: border-box; }
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: var(--headerH); /* чтобы якоря/scrollIntoView не прятались под шапкой */
+      scroll-padding-top: var(--headerH);
     }
     body{
       margin:0;
@@ -45,7 +44,6 @@ html
       overflow-x:hidden;
     }
 
-    /* subtle noise overlay */
     body::before{
       content:"";
       position:fixed;
@@ -59,9 +57,7 @@ html
     a { color: inherit; text-decoration: none; }
     .container{ width:min(1100px, 92vw); margin: 0 auto; }
 
-    /* =========================
-       ШАПКА (на мобильном скрыта)
-       ========================= */
+    /* Header (hidden on mobile) */
     header{
       position:sticky;
       top:0;
@@ -74,7 +70,7 @@ html
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 10px 0; /* ниже, чем было */
+      padding: 10px 0;
       gap: 12px;
       min-height: var(--headerH);
     }
@@ -216,7 +212,6 @@ html
       backdrop-filter: blur(10px);
     }
 
-    /* Явно выделенный заголовок */
     h1{
       margin: 0;
       font-size: clamp(30px, 4.4vw, 52px);
@@ -241,7 +236,6 @@ html
       max-width: 62ch;
     }
 
-    /* Photo credit under photo */
     .photoCredit{
       padding: 10px 14px 14px;
       font-size: 12px;
@@ -257,7 +251,6 @@ html
     }
     .photoCredit a:hover{ opacity:.9; }
 
-    /* Side card */
     .sideCard{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
@@ -303,7 +296,6 @@ html
     .pill .k{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
     .pill .v{ font-weight: 800; font-size: 18px; letter-spacing:.2px; }
 
-    /* Buttons */
     .btn{
       appearance:none;
       border:none;
@@ -334,7 +326,6 @@ html
     }
     .btnGhost:hover{ background: rgba(255,255,255,.11); }
 
-    /* Quiz */
     .progressText{ font-size: 13px; color: var(--muted); }
     .progressBar{
       width: 240px;
@@ -351,7 +342,6 @@ html
       transition: width .35s ease;
     }
 
-    /* Увеличенные шрифты вопрос/ответ */
     .question{
       padding: 18px 16px 10px;
       font-size: clamp(18px, 2.2vw, 24px);
@@ -442,7 +432,6 @@ html
     }
     .footerBtns .btn{ width:auto; min-width: 180px; }
 
-    /* Result */
     .resultBox{
       padding: 18px 16px;
       display:flex;
@@ -469,7 +458,6 @@ html
       line-height:1.45;
     }
 
-    /* Toast */
     .toast{
       position: fixed;
       left: 50%;
@@ -493,7 +481,6 @@ html
     }
     .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
 
-    /* Footer */
     footer{
       padding: 26px 0 34px;
       color: rgba(255,255,255,.72);
@@ -510,7 +497,6 @@ html
     }
 
     @media (max-width: 860px){
-      /* КЛЮЧЕВО: на мобильном убираем шапку полностью, чтобы ничего не перекрывало */
       header{ display:none; }
       html{ scroll-padding-top: 0px; }
 
@@ -530,7 +516,6 @@ html
 </head>
 
 <body>
-  <!-- Шапка есть на десктопе, на мобильном скрыта CSS-ом -->
   <header>
     <div class="container">
       <div class="nav">
@@ -549,7 +534,6 @@ html
   </header>
 
   <main id="top" class="container">
-    <!-- HERO -->
     <section class="hero" aria-label="Обложка">
       <div class="heroGrid">
         <div class="heroMedia" aria-label="Фото горбатого кита">
@@ -597,7 +581,6 @@ html
       </div>
     </section>
 
-    <!-- START -->
     <section id="start" aria-label="Старт">
       <div class="card">
         <div class="cardHeader">
@@ -615,7 +598,6 @@ html
       </div>
     </section>
 
-    <!-- QUIZ -->
     <section id="quiz" aria-label="Тест">
       <div class="card" id="quizCard">
         <div class="cardHeader">
@@ -643,7 +625,6 @@ html
       </div>
     </section>
 
-    <!-- RESULT -->
     <section id="result" aria-label="Результат">
       <div class="card">
         <div class="cardHeader">
@@ -677,16 +658,10 @@ html
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // ==========================
-    // Анти-угадайка по длине (можно выключить)
-    // ==========================
     const ANTI_LONGEST_BIAS = true;
     const ANTI_LONGEST_PROB = 0.85;
     const ANTI_LONGEST_TRIES = 12;
 
-    // ==========================
-    // Вопросы/ответы
-    // ==========================
     const QUESTIONS = [
       {
         q: "1) КПД турбины (упрощённо) — это…",
@@ -818,16 +793,19 @@ html
         ],
         correctId: "C"
       },
+
+      /* ✅ ОБНОВЛЁННЫЙ ВОПРОС 14 (правильный B) */
       {
-        q: "14) Что чаще всего “ломает” ответы в тестах на внимательность?",
+        q: "14) Что должно быть одинаковым, чтобы адекватно сравнить эффективность двух лопастей по выработке электричества на демонстрационном стенде?",
         options: [
-          { id: "A", text: "Пропуск слов «НЕ/наименее/наиболее» в вопросе" },
-          { id: "B", text: "Путаница, где у профиля передняя кромка" },
-          { id: "C", text: "Смешивание терминов «кавитация» и «турбулентность»" },
-          { id: "D", text: "Подмена КПД “скоростью”, а не отношением мощностей" }
+          { id: "A", text: "Только форма лопастей, а поток можно менять" },
+          { id: "B", text: "Поток воды и нагрузка генератора, остальное фиксировать" },
+          { id: "C", text: "Только обороты, а напряжение и ток не важны" },
+          { id: "D", text: "Место установки в потоке, но нагрузку можно менять" }
         ],
-        correctId: "A"
+        correctId: "B"
       },
+
       {
         q: "15) Что нельзя обещать заранее для туберкул “во всех случаях”?",
         options: [
@@ -840,9 +818,7 @@ html
       }
     ];
 
-    // ==========================
     // Helpers
-    // ==========================
     const $ = (sel) => document.querySelector(sel);
 
     function shuffle(arr){
@@ -891,20 +867,15 @@ html
       showToast._t = setTimeout(()=> toast.classList.remove("show"), 900);
     }
 
-    // ==========================
     // State
-    // ==========================
     let attempt = 1;
     let runQuestions = [];
     let idx = -1;
     let score = 0;
     let locked = false;
-
     let prevOrders = null;
 
-    // ==========================
-    // UI refs
-    // ==========================
+    // UI
     const startBtn = $("#startBtn");
     const restartBtn = $("#restartBtn");
     const attemptText = $("#attemptText");
@@ -916,9 +887,6 @@ html
     const scoreNum = $("#scoreNum");
     const scoreSub = $("#scoreSub");
 
-    // ==========================
-    // Core
-    // ==========================
     function buildRunQuestions(){
       const built = QUESTIONS.map(q => shuffleWithAntiLongest(q));
       const orders = built.map(b => b.options.map(o => o.id).join("|"));
@@ -1018,9 +986,6 @@ html
       document.querySelector("#result").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    // ==========================
-    // Events
-    // ==========================
     startBtn.addEventListener("click", () => {
       if(idx === -1){
         newAttempt();
@@ -1045,4 +1010,3 @@ html
   </script>
 </body>
 </html>
-
